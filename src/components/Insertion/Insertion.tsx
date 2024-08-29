@@ -1,17 +1,18 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, bubbleSort } from './Sort'
+import { Box, insertionSort } from './Sort'
 import Controls from './Controls'
 
-export default function BubbleSort() {
+export default function InsertionSort() {
   const [parent] = useAutoAnimate()
   const [boxes, setBoxes] = useState(
     new Array(10).fill('').map(
       (_, i): Box => ({
         Number: i + 1,
-        SelectedOutOfOrder: false,
-        SelectedInOrder: false,
+        Swapping: false,
+        Selected: false,
+        Checking: false,
         Complete: false,
       })
     )
@@ -25,8 +26,8 @@ export default function BubbleSort() {
     setIndex(0)
 
     array.forEach((box) => {
-      box.SelectedInOrder = false
-      box.SelectedOutOfOrder = false
+    box.Checking = false
+      box.Selected = false
       box.Complete = false
     })
   }
@@ -42,9 +43,8 @@ export default function BubbleSort() {
     }
 
     setSteps(
-      bubbleSort(
-        boxes.map((x) => x),
-        boxes.length
+    insertionSort(
+        boxes.map((x) => x)
       )
     )
     setBoxes([...boxes])
@@ -119,13 +119,11 @@ export default function BubbleSort() {
               style={boxStyle}
               key={box.Number}
               className={`${
-                box.Complete
-                  ? 'bg-green-500'
-                  : box.SelectedInOrder
-                    ? 'bg-blue-500'
-                    : box.SelectedOutOfOrder
-                      ? 'bg-red-500'
-                      : 'bg-transparent'
+                box.Swapping
+                ? 'bg-yellow-500': box.Checking
+                ? 'bg-blue-500': box.Selected
+                ? 'bg-red-500' : box.Complete
+                ? 'bg-green-500' : 'bg-transparent'
               }`}
             >
               <span>{box.Number}</span>
