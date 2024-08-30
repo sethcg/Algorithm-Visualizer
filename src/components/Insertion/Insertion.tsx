@@ -97,7 +97,7 @@ export default function InsertionSort() {
 
   const handleIncrement = () => {
     const temp = index.valueOf() + 1
-    if (temp < steps.length - 1) {
+    if (temp <= steps.length - 1) {
       setIndex(temp)
       setBoxes([...steps[temp]])
     }
@@ -113,23 +113,23 @@ export default function InsertionSort() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <ul style={containerStyle} ref={parent}>
-          {boxes.map((box) => (
-            <li
-              style={boxStyle}
-              key={box.Number}
-              className={`${
-                box.Swapping
-                ? 'bg-yellow-500': box.Checking
-                ? 'bg-blue-500': box.Selected
-                ? 'bg-red-500' : box.Complete
-                ? 'bg-green-500' : 'bg-transparent'
-              }`}
-            >
-              <span>{box.Number}</span>
-            </li>
-          ))}
-        </ul>
+            <ul ref={parent} className='flex flex-row grow mx-8 my-2'>
+            {boxes.map((box) => (
+                <li
+                style={{height: `calc(${box.Number * 1}rem + 50px)`, width: 'calc(10% - 0.5em)'}}
+                key={box.Number}
+                className={`flex items-center justify-center mt-auto mx-1 box-border border-b-gray-50 border-2 ${
+                    box.Swapping
+                    ? 'bg-yellow-500': box.Checking
+                    ? 'bg-blue-500': box.Selected
+                    ? 'bg-red-500' : box.Complete
+                    ? 'bg-green-500' : 'bg-transparent'
+                }`}
+                >
+                    <span>{box.Number}</span>
+                </li>
+            ))}
+            </ul>
         <Controls
           status={status}
           shuffle={handleShuffle}
@@ -142,23 +142,4 @@ export default function InsertionSort() {
       </div>
     </>
   )
-}
-
-const containerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  margin: '2em, -0.25em, 2em, -0.25em',
-}
-
-const boxStyle: React.CSSProperties = {
-  boxSizing: 'border-box',
-  width: 'calc(10% - 0.5em)',
-  margin: '0.25em',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '0.875em',
-  fontWeight: '300',
-  aspectRatio: '1',
-  border: '1px solid white',
 }

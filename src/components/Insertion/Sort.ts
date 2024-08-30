@@ -110,8 +110,5 @@ export function insertionSort(array: Box[]): Box[][] {
     })
   )
 
-  console.log(steps.length);
-  console.log(steps);
-  console.log(boxes);
   return steps
 }
