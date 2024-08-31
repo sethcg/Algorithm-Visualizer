@@ -1,16 +1,16 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, quickSort } from './Sort'
+import { Box, selectionSort } from './Sort'
 import Controls from './Controls'
 
-export default function QuickSort() {
+export default function SelectionSort() {
   const [parent] = useAutoAnimate()
   const [boxes, setBoxes] = useState(
     new Array(10).fill('').map(
       (_, i): Box => ({
         Number: i + 1,
-        Pivot: false,
+        Selected: false,
         Checking: false,
         Complete: false,
       })
@@ -34,7 +34,7 @@ export default function QuickSort() {
       boxes[j] = temp
     }
 
-    setSteps(quickSort(boxes.map((x) => x)))
+    setSteps(selectionSort(boxes.map((x) => x)))
     setBoxes([...boxes])
   }
 
@@ -125,7 +125,7 @@ export default function QuickSort() {
               className={`flex items-center justify-center mt-auto mx-1 box-border border-b-gray-50 border-2 ${
                 box.Checking
                   ? 'bg-blue-500'
-                  : box.Pivot
+                  : box.Selected
                     ? 'bg-red-500'
                     : box.Complete
                       ? 'bg-green-500'

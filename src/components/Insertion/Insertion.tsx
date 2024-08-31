@@ -18,7 +18,7 @@ export default function InsertionSort() {
     )
   )
   const [steps, setSteps] = useState<Box[][]>([[...boxes]])
-  
+
   const reset = () => {
     // RESET THE INDEX AND PLAY/PAUSE BUTTONS
     setStatus({ ...status, playing: false, cancelled: true, reset: true })
@@ -64,7 +64,12 @@ export default function InsertionSort() {
             setBoxes([...steps[temp]])
           } else {
             // DONE
-            setStatus({ ...status, playing: false, cancelled: true, reset: false })
+            setStatus({
+              ...status,
+              playing: false,
+              cancelled: true,
+              reset: false,
+            })
           }
         }
       })
