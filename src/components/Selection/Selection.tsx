@@ -2,7 +2,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
 import { Box, selectionSort } from './Sort'
-import Controls from './Controls'
+import Controls from '../Extras/Controls'
 
 export default function SelectionSort() {
   const [parent] = useAutoAnimate()

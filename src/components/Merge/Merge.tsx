@@ -1,18 +1,16 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, insertionSort } from './Sort'
+import { Box, mergeSort } from './Sort'
 import Controls from '../Extras/Controls'
 
-export default function InsertionSort() {
+export default function MergeSort() {
   const [parent] = useAutoAnimate()
   const [boxes, setBoxes] = useState(
     new Array(10).fill('').map(
       (_, i): Box => ({
         Number: i + 1,
-        Swapping: false,
         Selected: false,
-        Checking: false,
         Complete: false,
       })
     )
@@ -35,7 +33,7 @@ export default function InsertionSort() {
       boxes[j] = temp
     }
 
-    setSteps(insertionSort(boxes.map((x) => x)))
+    setSteps(mergeSort(boxes.map((x) => x)))
     setBoxes([...boxes])
   }
 
@@ -124,15 +122,11 @@ export default function InsertionSort() {
               }}
               key={box.Number}
               className={`flex items-center justify-center mt-auto mx-1 box-border border-b-gray-50 border-2 ${
-                box.Swapping
-                  ? 'bg-yellow-500'
-                  : box.Checking
-                    ? 'bg-blue-500'
-                    : box.Selected
-                      ? 'bg-red-500'
-                      : box.Complete
-                        ? 'bg-green-500'
-                        : 'bg-transparent'
+                box.Selected
+                  ? 'bg-blue-500'
+                  : box.Complete
+                    ? 'bg-green-500'
+                    : 'bg-transparent'
               }`}
             >
               <span>{box.Number}</span>
