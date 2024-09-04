@@ -45,7 +45,6 @@ export function selectionSort(array: Box[]): Box[][] {
       }
     }
 
-    console.log(`${i} SWAPPED WITH ${swapIndex}`)
     // SWAP THE NUMBERS
     temp = boxes[i]
     boxes[i] = boxes[swapIndex]
@@ -76,7 +75,5 @@ export function selectionSort(array: Box[]): Box[][] {
     })
   )
 
-  console.log(steps)
-  console.log(boxes)
   return steps
 }

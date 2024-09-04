@@ -56,16 +56,13 @@ const merge = (left: Box[], right: Box[]) => {
 }
 
 const mergeSortHelper = (boxes: Box[], steps: Box[][]) => {
-  let step: number = 1,
-    i: number
+  let step: number = 1
   while (step < boxes.length) {
     // ITERATE EACH "STEP" (USUALLY THIS WOULD BE DONE RECURSIVELY)
-    for (i = 0; i < boxes.length; i = i + 2 * step) {
+    for (let i = 0; i < boxes.length; i = i + 2 * step) {
       const left = boxes.slice(i, i + step)
       const right = boxes.slice(i + step, i + 2 * step)
       const merged = merge(left, right)
-
-      console.log(merged)
 
       merged.forEach((box, index) => {
         boxes[i + index] = box
@@ -84,6 +81,5 @@ const mergeSortHelper = (boxes: Box[], steps: Box[][]) => {
     step *= 2
   }
 
-  console.log(boxes)
   return boxes
 }

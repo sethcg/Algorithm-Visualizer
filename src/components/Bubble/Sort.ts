@@ -107,6 +107,5 @@ export function bubbleSort(array: Box[], size: number): Box[][] {
     })
   )
 
-  console.log(steps)
   return steps
 }
