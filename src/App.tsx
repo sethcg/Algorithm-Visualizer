@@ -3,6 +3,7 @@ import { useState } from 'react'
 import './App.css'
 
 import BubbleSort from './components/Bubble/Bubble.tsx'
+import CocktailSort from './components/Cocktail/Cocktail.tsx'
 import InsertionSort from './components/Insertion/Insertion.tsx'
 import QuickSort from './components/Quick/Quick'
 import SelectionSort from './components/Selection/Selection'
@@ -22,6 +23,11 @@ const App = function () {
       titleText: 'Bubble Sort',
       component: <BubbleSort></BubbleSort>,
       active: true,
+    },
+    {
+      titleText: 'Cocktail Sort',
+      component: <CocktailSort></CocktailSort>,
+      active: false,
     },
     {
       titleText: 'Insertion Sort',
