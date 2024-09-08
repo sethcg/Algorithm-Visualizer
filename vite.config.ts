@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react-swc'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://sethcg.github.io/algorithm-visualizer/',
+  base: './',
   plugins: [react()],
 })

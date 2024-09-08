@@ -2,7 +2,7 @@
   "name": "algorithm-visualizer",
   "private": true,
   "version": "0.0.1",
-  "homepage": "https://sethcg.github.io/algorithm-visualizer",
+  "homepage": "https://sethcg.github.io/Algorithm-Visualizer",
   "type": "module",
   "scripts": {
     "dev": "vite",
