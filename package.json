@@ -2,6 +2,7 @@
   "name": "algorithm-visualizer",
   "private": true,
   "version": "0.0.1",
+  "homepage": "https://sethcg.github.io/algorithm-visualizer",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +12,7 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css}' --config ./prettier.config.js",
     "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build"
+    "deploy" : "gh-pages -d dist"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
