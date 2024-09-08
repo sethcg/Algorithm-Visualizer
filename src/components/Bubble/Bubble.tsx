@@ -1,7 +1,9 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, bubbleSort } from './Sort'
+import { bubbleSort } from './Sort'
+
+import { Box } from '../Extras/Steps'
 import Controls from '../Extras/Controls'
 
 export default function BubbleSort() {
@@ -34,12 +36,7 @@ export default function BubbleSort() {
       boxes[j] = temp
     }
 
-    setSteps(
-      bubbleSort(
-        boxes.map((x) => x),
-        boxes.length
-      )
-    )
+    setSteps(bubbleSort(boxes.map((x) => x)))
     setBoxes([...boxes])
   }
 
@@ -63,9 +60,18 @@ export default function BubbleSort() {
       await delay(250).then(() => {
         if (status.playing && !status.cancelled) {
           const temp = index.valueOf() + 1
-          if (temp <= steps.length - 1) {
+          if (temp < steps.length - 1) {
             setIndex(temp)
             setBoxes([...steps[temp]])
+          } else if (temp == steps.length - 1) {
+            setIndex(temp)
+            setBoxes([...steps[temp]])
+            setStatus({
+              ...status,
+              playing: false,
+              cancelled: true,
+              reset: false,
+            })
           }
         }
       })

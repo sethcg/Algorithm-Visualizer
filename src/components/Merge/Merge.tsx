@@ -1,7 +1,9 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, mergeSort } from './Sort'
+import { mergeSort } from './Sort'
+
+import { Box } from '../Extras/Steps'
 import Controls from '../Extras/Controls'
 
 export default function MergeSort() {
@@ -57,11 +59,13 @@ export default function MergeSort() {
       await delay(250).then(() => {
         if (status.playing && !status.cancelled) {
           const temp = index.valueOf() + 1
-          if (temp <= steps.length - 1) {
+          if (temp < steps.length - 1) {
             setIndex(temp)
             setBoxes([...steps[temp]])
-          } else {
+          } else if (temp == steps.length - 1) {
             // DONE
+            setIndex(temp)
+            setBoxes([...steps[temp]])
             setStatus({
               ...status,
               playing: false,

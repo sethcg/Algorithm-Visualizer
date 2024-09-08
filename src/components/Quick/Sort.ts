@@ -1,9 +1,4 @@
-export interface Box {
-  Number: number
-  Pivot: boolean
-  Checking: boolean
-  Complete: boolean
-}
+import { addStep, Box } from '../Extras/Steps'
 
 export function quickSort(array: Box[]): Box[][] {
   // RECORD EACH "STEP" OF THE QUICK SORT ALGORITHM AS A NEW ARRAY OF BOXES
@@ -11,31 +6,21 @@ export function quickSort(array: Box[]): Box[][] {
   const boxes: Box[] = array.map((x) => x)
 
   // FIRST "STEP" SHUFFLED NUMBERS
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Pivot: false,
-        Checking: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => false,
+  })
 
   // RUN THE QUICKSORT ALGORITHM ADDING STEPS ALONG THE WAY
   quickSortHelper(boxes, 0, array.length - 1, steps)
 
   // FINAL "STEP" ALL NUMBERS SORTED
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Pivot: false,
-        Checking: false,
-        Complete: true,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => true,
+  })
 
   return steps
 }
@@ -63,32 +48,23 @@ const partition = (
   const pivot = boxes[rightIndex].Number
 
   // PIVOT CHANGE
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Pivot: x.Number === pivot,
-        Checking: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: (box: Box) => box.Number === pivot,
+    Checking: () => false,
+    Complete: () => false,
+  })
 
-  let i: number = leftIndex - 1,
-    j: number,
-    temp: Box
+  let i: number = leftIndex - 1
+  let j: number
+  let temp: Box
+
   for (j = leftIndex; j <= rightIndex - 1; j++) {
     if (i > 0) {
-      steps.push(
-        boxes.map((x) => {
-          return {
-            Number: x.Number,
-            Pivot: x.Number === pivot,
-            Checking: x.Number == boxes[i].Number,
-            Complete: false,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (box: Box) => box.Number === pivot,
+        Checking: (box: Box) => box.Number == boxes[i].Number,
+        Complete: () => false,
+      })
     }
     if (boxes[j].Number < pivot) {
       i++
@@ -99,16 +75,11 @@ const partition = (
       boxes[j] = temp
 
       // RECORD THE SWAP STEP
-      steps.push(
-        boxes.map((x) => {
-          return {
-            Number: x.Number,
-            Pivot: x.Number === pivot,
-            Checking: false,
-            Complete: false,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (box: Box) => box.Number === pivot,
+        Checking: () => false,
+        Complete: () => false,
+      })
     }
   }
 
@@ -118,16 +89,11 @@ const partition = (
   boxes[rightIndex] = temp
 
   // RECORD THE SWAP STEP
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Pivot: x.Number === pivot,
-        Checking: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: (box: Box) => box.Number === pivot,
+    Checking: () => false,
+    Complete: () => false,
+  })
 
   return i + 1
 }

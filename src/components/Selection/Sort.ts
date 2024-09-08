@@ -1,9 +1,4 @@
-export interface Box {
-  Number: number
-  Selected: boolean
-  Checking: boolean
-  Complete: boolean
-}
+import { addStep, Box } from '../Extras/Steps'
 
 export function selectionSort(array: Box[]): Box[][] {
   // RECORD EACH "STEP" OF THE SELECTION SORT ALGORITHM AS A NEW ARRAY OF BOXES
@@ -11,16 +6,11 @@ export function selectionSort(array: Box[]): Box[][] {
   const boxes: Box[] = array.map((x) => x)
 
   // FIRST "STEP" SHUFFLED NUMBERS
-  steps.push(
-    boxes.map((x: Box) => {
-      return {
-        Number: x.Number,
-        Selected: false,
-        Checking: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => false,
+  })
 
   // RUN THE SELECTION SORT MARKING "STEPS" ALONG THE WAY
   let i: number, j: number, temp: Box
@@ -28,16 +18,11 @@ export function selectionSort(array: Box[]): Box[][] {
     let swapIndex = i
     for (j = i + 1; j < boxes.length; j++) {
       // CHECKING BOX
-      steps.push(
-        boxes.map((x: Box, index: number) => {
-          return {
-            Number: x.Number,
-            Selected: index == i,
-            Checking: index == j,
-            Complete: i != 0 && index <= i,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (_: Box, index: number) => index == i,
+        Checking: (_: Box, index: number) => index == j,
+        Complete: (_: Box, index: number) => i != 0 && index <= i,
+      })
 
       // FIND THE MINIMUM VALUE TO SWAP WITH
       if (boxes[j].Number < boxes[swapIndex].Number) {
@@ -51,29 +36,19 @@ export function selectionSort(array: Box[]): Box[][] {
     boxes[swapIndex] = temp
 
     // CHECKING BOX
-    steps.push(
-      boxes.map((x: Box, index: number) => {
-        return {
-          Number: x.Number,
-          Selected: false,
-          Checking: false,
-          Complete: index <= i,
-        }
-      })
-    )
+    addStep(steps, boxes, {
+      Selected: () => false,
+      Checking: () => false,
+      Complete: (_: Box, index: number) => index <= i,
+    })
   }
 
   // FINAL "STEP" ALL NUMBERS SORTED
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Selected: false,
-        Checking: false,
-        Complete: true,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => true,
+  })
 
   return steps
 }

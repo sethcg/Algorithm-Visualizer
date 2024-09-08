@@ -1,58 +1,35 @@
-export interface Box {
-  Number: number
-  Selected: boolean
-  Checking: boolean
-  Complete: boolean
-}
+import { addStep, Box } from '../Extras/Steps'
 
-export function bubbleSort(array: Box[], size: number): Box[][] {
-  // RECORD EACH "STEP" OF THE BUBBLESORT ALGORITHM AS A NEW ARRAY OF BOXES
+export function bubbleSort(array: Box[]): Box[][] {
   const steps: Box[][] = []
   const boxes: Box[] = array.map((x) => x)
 
   // FIRST "STEP" SHUFFLED NUMBERS
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Selected: false,
-        Checking: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => false,
+  })
 
   // TRACKS WHICH NUMBERS HAVE "BUBBLED" UP AND ARE SORTED
-  let completeIndex: number = -1
+  const complete: number[] = []
 
   let i: number, j: number, temp: Box
-  for (i = 0; i < size - 1; i++) {
-    for (j = 0; j < size - i - 1; j++) {
+  for (i = 0; i < boxes.length - 1; i++) {
+    for (j = 0; j < boxes.length - i - 1; j++) {
       // SELECT STEP
-      boxes[j].Selected = true
-      steps.push(
-        boxes.map((x: Box, index: number) => {
-          return {
-            Number: x.Number,
-            Selected: x.Selected,
-            Checking: x.Checking,
-            Complete: index >= size - 1 - completeIndex,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (_: Box, index: number) => index === j,
+        Checking: () => false,
+        Complete: (box: Box) => complete.includes(box.Number),
+      })
 
       // CHECKING STEP
-      boxes[j + 1].Checking = true
-      steps.push(
-        boxes.map((x: Box, index: number) => {
-          return {
-            Number: x.Number,
-            Selected: x.Selected,
-            Checking: x.Checking,
-            Complete: index >= size - 1 - completeIndex,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (_: Box, index: number) => index === j,
+        Checking: (_: Box, index: number) => index === j + 1,
+        Complete: (box: Box) => complete.includes(box.Number),
+      })
 
       if (boxes[j].Number > boxes[j + 1].Number) {
         // SWAP THE NUMBERS
@@ -60,52 +37,29 @@ export function bubbleSort(array: Box[], size: number): Box[][] {
         boxes[j] = boxes[j + 1]
         boxes[j + 1] = temp
 
-        //
-        boxes[j].Selected = false
-        boxes[j + 1].Selected = true
-        steps.push(
-          boxes.map((x: Box, index: number) => {
-            return {
-              Number: x.Number,
-              Selected: x.Selected,
-              Checking: x.Checking,
-              Complete: index >= size - 1 - completeIndex,
-            }
-          })
-        )
+        // POST-SWAP STEP
+        addStep(steps, boxes, {
+          Selected: (_: Box, index: number) => index === j + 1,
+          Checking: () => false,
+          Complete: (box: Box) => complete.includes(box.Number),
+        })
       }
-
-      // RESET BOXES
-      boxes.forEach((box) => {
-        box.Selected = false
-        box.Checking = false
-      })
     }
 
-    completeIndex++
-    steps.push(
-      boxes.map((x: Box, index: number) => {
-        return {
-          Number: x.Number,
-          Selected: x.Selected,
-          Checking: x.Checking,
-          Complete: index >= size - 1 - completeIndex,
-        }
-      })
-    )
+    complete.push(boxes[boxes.length - i - 1].Number)
+    addStep(steps, boxes, {
+      Selected: () => false,
+      Checking: () => false,
+      Complete: (box: Box) => complete.includes(box.Number),
+    })
   }
 
   // FINAL "STEP" ALL NUMBERS SORTED
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Selected: x.Selected,
-        Checking: x.Checking,
-        Complete: true,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Checking: () => false,
+    Complete: () => true,
+  })
 
   return steps
 }

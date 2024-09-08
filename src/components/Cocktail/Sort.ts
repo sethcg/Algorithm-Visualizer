@@ -1,9 +1,4 @@
-export interface Box {
-  Number: number
-  Selected: boolean
-  Checking: boolean
-  Complete: boolean
-}
+import { addStep, Box } from '../Extras/Steps'
 
 export function cocktailSort(array: Box[]): Box[][] {
   // RECORD EACH "STEP" OF THE COCKTAIL SORT ALGORITHM AS A NEW ARRAY OF BOXES
@@ -106,24 +101,4 @@ export function cocktailSort(array: Box[]): Box[][] {
   })
 
   return steps
-}
-
-// HELPERS FOR ADDING STEPS
-interface StepProps {
-  Selected: (box: Box, index: number) => boolean
-  Checking: (box: Box, index: number) => boolean
-  Complete: (box: Box, index: number) => boolean
-}
-
-const addStep = (steps: Box[][], boxes: Box[], props: StepProps): void => {
-  steps.push(
-    boxes.map((box: Box, index: number) => {
-      return {
-        Number: box.Number,
-        Checking: props.Checking(box, index),
-        Selected: props.Selected(box, index),
-        Complete: props.Complete(box, index),
-      }
-    })
-  )
 }

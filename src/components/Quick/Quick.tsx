@@ -1,7 +1,9 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
 
-import { Box, quickSort } from './Sort'
+import { quickSort } from './Sort'
+
+import { Box } from '../Extras/Steps'
 import Controls from '../Extras/Controls'
 
 export default function QuickSort() {
@@ -10,7 +12,7 @@ export default function QuickSort() {
     new Array(10).fill('').map(
       (_, i): Box => ({
         Number: i + 1,
-        Pivot: false,
+        Selected: false,
         Checking: false,
         Complete: false,
       })
@@ -58,11 +60,13 @@ export default function QuickSort() {
       await delay(250).then(() => {
         if (status.playing && !status.cancelled) {
           const temp = index.valueOf() + 1
-          if (temp <= steps.length - 1) {
+          if (temp < steps.length - 1) {
             setIndex(temp)
             setBoxes([...steps[temp]])
-          } else {
+          } else if (temp == steps.length - 1) {
             // DONE
+            setIndex(temp)
+            setBoxes([...steps[temp]])
             setStatus({
               ...status,
               playing: false,
@@ -125,7 +129,7 @@ export default function QuickSort() {
               className={`flex items-center justify-center mt-auto mx-1 box-border border-b-gray-50 border-2 ${
                 box.Checking
                   ? 'bg-blue-500'
-                  : box.Pivot
+                  : box.Selected
                     ? 'bg-red-500'
                     : box.Complete
                       ? 'bg-green-500'

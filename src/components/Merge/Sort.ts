@@ -1,8 +1,4 @@
-export interface Box {
-  Number: number
-  Selected: boolean
-  Complete: boolean
-}
+import { addStep, Box } from '../Extras/Steps'
 
 export function mergeSort(array: Box[]): Box[][] {
   // RECORD EACH "STEP" OF THE MERGE SORT ALGORITHM AS A NEW ARRAY OF BOXES
@@ -10,29 +6,19 @@ export function mergeSort(array: Box[]): Box[][] {
   const boxes: Box[] = array.map((x) => x)
 
   // FIRST "STEP" SHUFFLED NUMBERS
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Selected: false,
-        Complete: false,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Complete: () => false,
+  })
 
   // RUN THE MERGE ALGORITHM ADDING STEPS ALONG THE WAY
   mergeSortHelper(boxes, steps)
 
   // FINAL "STEP" ALL NUMBERS SORTED
-  steps.push(
-    boxes.map((x) => {
-      return {
-        Number: x.Number,
-        Selected: false,
-        Complete: true,
-      }
-    })
-  )
+  addStep(steps, boxes, {
+    Selected: () => false,
+    Complete: () => true,
+  })
 
   return steps
 }
@@ -41,8 +27,8 @@ export function mergeSort(array: Box[]): Box[][] {
 const merge = (left: Box[], right: Box[]) => {
   const array: Box[] = []
 
-  let i: number = 0,
-    j: number = 0
+  let i: number = 0
+  let j: number = 0
   while (i < left.length && j < right.length) {
     if (left[i].Number < right[j].Number) {
       array.push(left[i])
@@ -68,15 +54,11 @@ const mergeSortHelper = (boxes: Box[], steps: Box[][]) => {
         boxes[i + index] = box
       })
 
-      steps.push(
-        boxes.map((x) => {
-          return {
-            Number: x.Number,
-            Selected: merged.map((box: Box) => box.Number).includes(x.Number),
-            Complete: false,
-          }
-        })
-      )
+      addStep(steps, boxes, {
+        Selected: (box: Box) =>
+          merged.map((x: Box) => x.Number).includes(box.Number),
+        Complete: () => false,
+      })
     }
     step *= 2
   }
